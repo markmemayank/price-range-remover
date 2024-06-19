@@ -1,18 +1,17 @@
 jQuery(document).ready(function($) {
     // Update the price when a variation is selected
-    $('form.variations_form').on('found_variation', function(event, variation) {
-        if (variation.price_html !== undefined) {
-            // Update the main price HTML
-            $('.summary .price').html(variation.price_html);
+    $('form.variations_form').on('show_variation', function(event, variation) {
+        if (variation && variation.display_price !== undefined) {
+            var price_html = variation.price_html;
+            $('.woocommerce-variation-price .price').html(price_html);
         }
     });
 
-    // Reset the price when no variation is selected
-    $('form.variations_form').on('reset_data', function() {
-        var $price = $(this).find('.summary .price');
-        var original_price = $price.data('original-price');
-        if (original_price) {
-            $price.html(original_price);
+    // Reset to the lowest price if no variation is selected
+    $('form.variations_form').on('hide_variation', function() {
+        var default_price = $('form.variations_form').find('.single_variation_wrap .woocommerce-variation-price .price').data('default-price');
+        if (default_price) {
+            $('.woocommerce-variation-price .price').html(default_price);
         }
     });
 });
